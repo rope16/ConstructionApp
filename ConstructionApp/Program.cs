@@ -1,8 +1,11 @@
 using ConstructionApp;
 using ConstructionApp.Interfaces.ConstructionSite;
+using ConstructionApp.Interfaces.ProjectInterfaces;
 using ConstructionApp.Interfaces.User;
+using ConstructionApp.Interfaces.UserInterfaces;
 using ConstructionApp.Services.ConstructionSiteService;
-using ConstructionApp.Services.User;
+using ConstructionApp.Services.ProjectServices;
+using ConstructionApp.Services.UserServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +23,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 
 builder.Services.AddScoped<IUserPasswordHasherService, UserPasswordHasherService>();
 builder.Services.AddScoped<IConstructionSiteService, ConstructionSiteService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 var app = builder.Build();
 

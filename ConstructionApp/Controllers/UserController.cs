@@ -1,4 +1,6 @@
-﻿using ConstructionApp.Interfaces.User;
+﻿using ConstructionApp.Dtos.User;
+using ConstructionApp.Interfaces.User;
+using ConstructionApp.Interfaces.UserInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,26 +10,29 @@ namespace ConstructionApp.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-
-        public UserController(ApplicationDbContext context)
+        [HttpPost]
+        [Route("createUser")]
+        public async Task<ActionResult<UserDetailsDto>> CreateUser(CreateUserDto dto, [FromServices] IUserService _userService)
         {
-            _context = context;
+            var response = await _userService.CreateUser(dto);
+
+            return response;
         }
 
         [HttpGet]
-        [Route("hashPassword")]
-        public string HashPassword(string password, [FromServices] IUserPasswordHasherService _passwordHasher)
+        [Route("getAllUsers")]
+        public async Task<ActionResult<List<UserDetailsDto>>> GetAllUsers([FromServices] IUserService _userService)
         {
-            var hashedPassowrd = _passwordHasher.HashPassword(password);
-            return hashedPassowrd;
+            var response = await _userService.GetAllUsers();
+
+            return response;
         }
 
-        [HttpGet]
-        [Route("verifyPassword")]
-        public bool VerifyPassword(string password, string hashedPassword, [FromServices] IUserPasswordHasherService _passwordHasher)
+        [HttpDelete]
+        [Route("{userId}/deleteUser")]
+        public async Task<ActionResult<bool>> DeleteUser([FromRoute] Guid userId, [FromServices] IUserService _userService)
         {
-            var result = _passwordHasher.VerifyPassword(password, hashedPassword);
+            var result = await _userService.DeleteUser(userId);
 
             return result;
         }

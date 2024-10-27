@@ -13,5 +13,25 @@
         #region #Relationships
         public ConstructionSite? ConstructionSite { get; set; }
         #endregion
+
+        public static Project CreateProject(
+            string name,
+            string note,
+            DateTime startDate,
+            DateTime endDate,
+            string status,
+            Guid constructionSiteId)
+        {
+            return new Project
+            {
+                ProjectId = Guid.NewGuid(),
+                Name = name,
+                Note = note,
+                StartDate = startDate,
+                EndDate = endDate,
+                Status = status,
+                ConstructionSiteId = constructionSiteId
+            };
+        }
     }
 }

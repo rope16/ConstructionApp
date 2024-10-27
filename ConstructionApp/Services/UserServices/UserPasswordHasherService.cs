@@ -1,7 +1,7 @@
 ﻿using ConstructionApp.Interfaces.User;
 using System.Security.Cryptography;
 
-namespace ConstructionApp.Services.User
+namespace ConstructionApp.Services.UserServices
 {
     public class UserPasswordHasherService : IUserPasswordHasherService
     {
