@@ -1,7 +1,10 @@
-﻿using ConstructionApp.Constants;
-
-namespace ConstructionApp.Models
+﻿namespace ConstructionApp.Models
 {
+    public enum UserRoles
+    {
+        Admin,
+        User
+    }
     public class User
     {
         public Guid UserId { get; set; }
@@ -16,8 +19,7 @@ namespace ConstructionApp.Models
             string firstName,
             string lastName,
             string email,
-            string password,
-            string role)
+            string password)
         {
             return new User
             {
@@ -26,7 +28,7 @@ namespace ConstructionApp.Models
                 LastName = lastName,
                 Email = email,
                 Password = password,
-                Role = role,
+                Role = UserRoles.User.ToString(),
                 IsActive = true
             };
         }
@@ -34,6 +36,11 @@ namespace ConstructionApp.Models
         public void DeleteUser()
         {
             IsActive = false;
+        }
+
+        public void UpdateUserRole(string role)
+        {
+            Role = role;
         }
     }
 }

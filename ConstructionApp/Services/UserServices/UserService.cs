@@ -34,7 +34,7 @@ namespace ConstructionApp.Services.UserServices
 
             var hashedPassword = _passwordHasher.HashPassword(dto.Password);
 
-            var newUser = User.CreateUser(dto.FirstName, dto.LastName, dto.Email, hashedPassword, dto.Role);
+            var newUser = User.CreateUser(dto.FirstName, dto.LastName, dto.Email, hashedPassword);
 
             _context.Add(newUser);
 
@@ -45,7 +45,7 @@ namespace ConstructionApp.Services.UserServices
                 LastName = newUser.LastName,
                 Email = newUser.Email,
                 IsActive = newUser.IsActive,
-                Role = newUser.Role
+                Role = UserRoles.User.ToString()
             };
 
             await _context.SaveChangesAsync();
@@ -91,6 +91,39 @@ namespace ConstructionApp.Services.UserServices
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<UserDetailsDto> UpdateUserRole(Guid userId, string role)
+        {
+            if (!Enum.TryParse(typeof(UserRoles), role, out var validRole))
+            {
+                _logger.LogInformation("Provided role doesn't exist.");
+                return new UserDetailsDto();
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user is null)
+            {
+                _logger.LogInformation("User with provided id doesn't exist.");
+                return new UserDetailsDto();
+            }
+
+            user.UpdateUserRole(validRole.ToString());
+
+            var response = new UserDetailsDto
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role,
+                IsActive = user.IsActive,
+            };
+
+            await _context.SaveChangesAsync();
+
+            return response;
         }
     }
 }

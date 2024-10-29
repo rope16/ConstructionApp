@@ -1,5 +1,4 @@
-﻿using ConstructionApp.Constants;
-
+﻿
 namespace ConstructionApp.Dtos.User
 {
     public class UserDetailsDto

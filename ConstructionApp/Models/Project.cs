@@ -1,5 +1,12 @@
 ﻿namespace ConstructionApp.Models
 {
+    public enum ProjectStatus
+    {
+        NotStarted,
+        InProgress,
+        Completed,
+        Cancelled
+    }
     public class Project
     {
         public Guid ProjectId { get; set; }

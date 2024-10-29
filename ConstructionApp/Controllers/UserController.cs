@@ -2,6 +2,7 @@
 using ConstructionApp.Interfaces.User;
 using ConstructionApp.Interfaces.UserInterfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConstructionApp.Controllers
@@ -16,7 +17,7 @@ namespace ConstructionApp.Controllers
         {
             var response = await _userService.CreateUser(dto);
 
-            return response;
+            return Ok(response);
         }
 
         [HttpGet]
@@ -25,16 +26,25 @@ namespace ConstructionApp.Controllers
         {
             var response = await _userService.GetAllUsers();
 
-            return response;
+            return Ok(response);
         }
 
         [HttpDelete]
         [Route("{userId}/deleteUser")]
         public async Task<ActionResult<bool>> DeleteUser([FromRoute] Guid userId, [FromServices] IUserService _userService)
         {
-            var result = await _userService.DeleteUser(userId);
+            var response = await _userService.DeleteUser(userId);
 
-            return result;
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("{userId}/updateUserRole")]
+        public async Task<ActionResult<UserDetailsDto>> UpdateUserRole([FromRoute] Guid userId, [FromQuery] string role, [FromServices] IUserService _userService)
+        {
+            var response = await _userService.UpdateUserRole(userId, role);
+
+            return Ok(response);
         }
     }
 }
