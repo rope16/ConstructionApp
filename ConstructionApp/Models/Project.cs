@@ -29,6 +29,7 @@
             string status,
             Guid constructionSiteId)
         {
+            //test
             return new Project
             {
                 ProjectId = Guid.NewGuid(),
