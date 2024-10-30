@@ -17,5 +17,34 @@ namespace ConstructionApp.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("getAllProjects")]
+
+        public async Task<ActionResult<List<ProjectDetailsDto>>> GetAllProjects([FromServices] IProjectService service)
+        {
+            var response= await service.GetAllProjects();
+            return Ok(response);
+        }
+        [HttpDelete]
+        [Route("{projectId}/deleteProject")]
+
+        public async Task<ActionResult<bool>> DeleteProject([FromRoute] Guid projectId, [FromServices] IProjectService service)
+        {
+            var response = await service.DeleteProject(projectId);
+            return Ok(response);
+        }
+
+        [HttpPut]
+        [Route("{projectId}/updateProjectStatus")]
+        public async Task<ActionResult<ProjectDetailsDto>> UpdateProjectStatus(
+            [FromRoute] Guid projectId,
+            [FromQuery] string status,
+            [FromServices] IProjectService service)
+        {
+            var response = await service.UpdateProjectStatus(projectId, status);
+
+            return response;
+        }
     }
 }

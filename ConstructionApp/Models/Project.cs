@@ -26,7 +26,6 @@
             string note,
             DateTime startDate,
             DateTime endDate,
-            string status,
             Guid constructionSiteId)
         {
             return new Project
@@ -36,9 +35,14 @@
                 Note = note,
                 StartDate = startDate,
                 EndDate = endDate,
-                Status = status,
+                Status = ProjectStatus.NotStarted.ToString(),
                 ConstructionSiteId = constructionSiteId
             };
+        }
+
+        public void UpdateProjectStatus(string status)
+        {
+            Status = status;
         }
     }
 }
