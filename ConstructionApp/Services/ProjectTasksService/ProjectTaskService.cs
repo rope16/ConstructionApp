@@ -28,17 +28,18 @@ namespace ConstructionApp.Services.ProjectTasksService
                 return new ProjectTaskDetailsDto();
             }
 
-            //if (image != null && image.Length != 0)
-            //{
-            //    using (var memoryStream = new MemoryStream())
-            //    {
-            //        await image.CopyToAsync(memoryStream);
-            //        byte[] imageBytes = memoryStream.ToArray();
-            //        base64Image = Convert.ToBase64String(imageBytes);
-            //    }
-            //}
-
             var newProjectTask = ProjectTask.CreateProjectTask(dto.Note, dto.StartDate, dto.EndDate, dto.ProjectId);
+
+            if (dto.ProjectPhoto != null && dto.ProjectPhoto.Length != 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await dto.ProjectPhoto.CopyToAsync(memoryStream);
+                    byte[] imageBytes = memoryStream.ToArray();
+                    base64Image = Convert.ToBase64String(imageBytes);
+                    newProjectTask.TaskPhoto = base64Image;
+                }
+            }
 
             var response = new ProjectTaskDetailsDto
             {
@@ -62,6 +63,53 @@ namespace ConstructionApp.Services.ProjectTasksService
             _context.Add(newProjectTask);
 
             await _context.SaveChangesAsync();
+
+            return response;
+        }
+
+        public async Task<ProjectTaskDetailsDto> UploadProjectTaskPhoto(IFormFile image, Guid projectTaskId)
+        {
+            var projectTask = await _context.ProjectTasks
+                .Include(pt => pt.Project)
+                .FirstOrDefaultAsync(pt => pt.ProjectTaskId == projectTaskId);
+
+            if (projectTask is null)
+            {
+                _logger.LogInformation("Project task with provided was not found.");
+                return new ProjectTaskDetailsDto();
+            }
+
+            string base64Image = "";
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await image.CopyToAsync(memoryStream);
+                byte[] imageBytes = memoryStream.ToArray();
+                base64Image = Convert.ToBase64String(imageBytes);
+            }
+
+            projectTask.TaskPhoto = base64Image;
+
+            await _context.SaveChangesAsync();
+
+            var response = new ProjectTaskDetailsDto
+            {
+                ProjectTaskId = projectTask.ProjectTaskId,
+                Note = projectTask.Note,
+                Status = projectTask.Status,
+                StartDate = projectTask.StartDate,
+                EndDate = projectTask.EndDate,
+                Project = new ProjectDetailsDto
+                {
+                    ProjectId = projectTask.Project.ProjectId,
+                    Note = projectTask.Project.Note,
+                    Name = projectTask.Project.Name,
+                    Status = projectTask.Project.Status,
+                    StartDate = projectTask.Project.StartDate,
+                    EndDate = projectTask.Project.EndDate,
+                    ConstructionSiteId = projectTask.Project.ConstructionSiteId
+                }
+            };
 
             return response;
         }

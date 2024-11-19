@@ -5,5 +5,6 @@ namespace ConstructionApp.Interfaces.ProjectTasksInterface
     public interface IProjectTaskInterface
     {
         Task<ProjectTaskDetailsDto> CreateProjectTask(ProjectTaskCreateDto dto);
+        Task<ProjectTaskDetailsDto> UploadProjectTaskPhoto(IFormFile image, Guid projectTaskId);
     }
 }

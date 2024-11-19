@@ -7,5 +7,6 @@
         public DateTime EndDate { get; set; }
         public string Status { get; set; } = string.Empty;
         public Guid ProjectId { get; set; }
+        public IFormFile? ProjectPhoto { get; set; }
     }
 }

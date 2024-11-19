@@ -12,10 +12,20 @@ namespace ConstructionApp.Controllers
         [HttpPost]
         [Route("createProjectTask")]
         public async Task<ActionResult<ProjectTaskDetailsDto>> CreateProjectTask(
-        ProjectTaskCreateDto dto,
+        [FromForm] ProjectTaskCreateDto dto,
         [FromServices] IProjectTaskInterface service)
         {
             var result = await service.CreateProjectTask(dto);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("uploadImage")]
+        public async Task<ActionResult<ProjectTaskDetailsDto>> UploadProjectPhoto([FromForm] ProjectTaskUploadImageDto dto,
+                                                                                  [FromServices] IProjectTaskInterface service)
+        {
+            var result = await service.UploadProjectTaskPhoto(dto.Image, dto.ProjectTaskId);
 
             return Ok(result);
         }
