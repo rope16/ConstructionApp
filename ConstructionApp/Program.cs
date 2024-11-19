@@ -1,10 +1,12 @@
 using ConstructionApp;
 using ConstructionApp.Interfaces.ConstructionSite;
 using ConstructionApp.Interfaces.ProjectInterfaces;
+using ConstructionApp.Interfaces.ProjectTasksInterface;
 using ConstructionApp.Interfaces.User;
 using ConstructionApp.Interfaces.UserInterfaces;
 using ConstructionApp.Services.ConstructionSiteService;
 using ConstructionApp.Services.ProjectServices;
+using ConstructionApp.Services.ProjectTasksService;
 using ConstructionApp.Services.UserServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,7 @@ builder.Services.AddScoped<IUserPasswordHasherService, UserPasswordHasherService
 builder.Services.AddScoped<IConstructionSiteService, ConstructionSiteService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectTaskInterface, ProjectTaskService>();
 
 var app = builder.Build();
 

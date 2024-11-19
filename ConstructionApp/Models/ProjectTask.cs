@@ -1,5 +1,12 @@
 ﻿namespace ConstructionApp.Models
 {
+    public enum ProjectTaskStatus
+    {
+        NotStarted,
+        InProgress,
+        Completed,
+        Cancelled
+    }
     public class ProjectTask
     {
         public Guid ProjectTaskId { get; set; }
@@ -13,5 +20,18 @@
         #region
         public Project? Project { get; set; }
         #endregion
+
+        public static ProjectTask CreateProjectTask(string note, DateTime startDate, DateTime endDate, Guid projectId)
+        {
+            return new ProjectTask
+            {
+                ProjectTaskId = new Guid(),
+                Note = note,
+                StartDate = startDate,
+                EndDate = endDate,
+                Status = ProjectTaskStatus.NotStarted.ToString(),
+                ProjectId = projectId
+            };
+        }
     }
 }
