@@ -48,7 +48,7 @@ namespace ConstructionApp.Migrations
                     b.ToTable("ConstructionSites");
                 });
 
-            modelBuilder.Entity("ConstructionApp.Models.Project", b =>
+            modelBuilder.Entity("ConstructionApp.Models.ProjectDetails", b =>
                 {
                     b.Property<Guid>("ProjectId")
                         .ValueGeneratedOnAdd()
@@ -150,7 +150,7 @@ namespace ConstructionApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ConstructionApp.Models.Project", b =>
+            modelBuilder.Entity("ConstructionApp.Models.ProjectDetails", b =>
                 {
                     b.HasOne("ConstructionApp.Models.ConstructionSite", "ConstructionSite")
                         .WithMany()
@@ -163,13 +163,13 @@ namespace ConstructionApp.Migrations
 
             modelBuilder.Entity("ConstructionApp.Models.ProjectTask", b =>
                 {
-                    b.HasOne("ConstructionApp.Models.Project", "Project")
+                    b.HasOne("ConstructionApp.Models.ProjectDetails", "ProjectDetails")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Project");
+                    b.Navigation("ProjectDetails");
                 });
 #pragma warning restore 612, 618
         }

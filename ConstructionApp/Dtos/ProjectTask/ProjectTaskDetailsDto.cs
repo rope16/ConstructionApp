@@ -10,6 +10,6 @@ namespace ConstructionApp.Dtos.ProjectTask
         public DateTime EndDate { get; set; }
         public string Status { get; set; } = string.Empty;
         public string TaskPhoto { get; set; } = string.Empty;
-        public ProjectDetailsDto Project { get; set; }
+        public ProjectDetailsDto? ProjectDetails { get; set; }
     }
 }

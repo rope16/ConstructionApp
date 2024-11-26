@@ -1,4 +1,5 @@
 ﻿using ConstructionApp.Dtos.Project;
+using ConstructionApp.Dtos.ProjectTask;
 using ConstructionApp.Interfaces.ProjectInterfaces;
 using ConstructionApp.Models;
 using Microsoft.EntityFrameworkCore;
@@ -131,6 +132,43 @@ namespace ConstructionApp.Services.ProjectServices
 
             return response;
         }
+        public async Task<ProjectDetailsDto> GetProjectWithTasks(Guid projectId)
+        {
+            var project= await _context.Projects.FirstOrDefaultAsync(p=>p.ProjectId == projectId);
+            if (project is null)
+            {
+                _logger.LogInformation("Project was not found");
+                return new ProjectDetailsDto();
+            }
+            var projectTasks=await _context.ProjectTasks.Where(p=>p.ProjectId == projectId).ToListAsync();
 
+            List<ProjectTaskDetailsDto> tasks = new List<ProjectTaskDetailsDto>();
+
+            foreach( var task in projectTasks )
+            {
+                var projectTask = new ProjectTaskDetailsDto
+                {
+                    ProjectTaskId = task.ProjectTaskId,
+                    Note = task.Note,
+                    StartDate = task.StartDate,
+                    EndDate = task.EndDate,
+                    Status = task.Status,
+                };
+            }
+
+            var result = new ProjectDetailsDto
+            {
+                ProjectId = project.ProjectId,
+                Name = project.Name,
+                Note = project.Note,
+                StartDate = project.StartDate,
+                EndDate = project.EndDate,
+                ConstructionSiteId = project.ConstructionSiteId,
+                Status = project.Status,
+                ProjectTasksDto = tasks
+            };
+
+            return result;
+        }
     }
 }

@@ -29,5 +29,21 @@ namespace ConstructionApp.Controllers
 
             return Ok(result);
         }
+        [HttpGet]
+        [Route("getAllProjectTask")]
+        public async Task<ActionResult<List<ProjectTaskDetailsDto>>> GetAllProjectTasks([FromServices] IProjectTaskInterface service)
+        {
+            var result = await service.GetAllProjectTasks();
+
+            return Ok(result);
+        }
+        [HttpDelete]
+        [Route("{projectTaskId}/deleteProjectTask")]
+
+        public async Task<ActionResult<bool>> DeleteProjectTask([FromRoute] Guid projectTaskId, [FromServices] IProjectTaskInterface service)
+        {
+            var result = await service.DeleteProjectTask(projectTaskId);
+            return Ok(result);
+        }
     }
 }

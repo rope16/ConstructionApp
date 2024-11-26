@@ -1,4 +1,5 @@
 ﻿using ConstructionApp.Dtos.ConstructionSite;
+using ConstructionApp.Dtos.ProjectTask;
 
 namespace ConstructionApp.Dtos.Project
 {
@@ -12,5 +13,7 @@ namespace ConstructionApp.Dtos.Project
         public string Status { get; set; } = string.Empty;
         public Guid? ConstructionSiteId { get; set; }
         public ConstructionSiteDetailDto? ConstructionSiteDetails { get; set; }
+
+        public List<ProjectTaskDetailsDto>? ProjectTasksDto { get; set; }
     }
 }

@@ -46,5 +46,14 @@ namespace ConstructionApp.Controllers
 
             return response;
         }
+
+        [HttpGet]
+        [Route("{projectId}/getProjectWithTasks")]
+        public async Task<ActionResult<ProjectDetailsDto>> GetProjectWithTasks([FromRoute] Guid projectId, [FromServices] IProjectService service)
+        {
+            var response = await service.GetProjectWithTasks(projectId);
+
+            return Ok(Response);
+        }
     }
 }
