@@ -53,7 +53,7 @@ namespace ConstructionApp.Controllers
         {
             var response = await service.GetProjectWithTasks(projectId);
 
-            return Ok(Response);
+            return Ok(response);
         }
     }
 }

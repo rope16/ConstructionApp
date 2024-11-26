@@ -154,6 +154,8 @@ namespace ConstructionApp.Services.ProjectServices
                     EndDate = task.EndDate,
                     Status = task.Status,
                 };
+
+                tasks.Add(projectTask);
             }
 
             var result = new ProjectDetailsDto
