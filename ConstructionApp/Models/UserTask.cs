@@ -11,5 +11,15 @@
         public User? User { get; set; }
         public ProjectTask? ProjectTask { get; set; }
         #endregion
+        public static UserTask CreateUserTask(string note, Guid userId, Guid projectTaskId)
+        {
+            return new UserTask
+            {
+                UserTaskId = Guid.NewGuid(),
+                Note = note,
+                UserId = userId,
+                ProjectTaskId = projectTaskId
+            };
+        }
     }
 }

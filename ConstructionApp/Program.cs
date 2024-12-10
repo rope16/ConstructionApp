@@ -4,10 +4,12 @@ using ConstructionApp.Interfaces.ProjectInterfaces;
 using ConstructionApp.Interfaces.ProjectTasksInterface;
 using ConstructionApp.Interfaces.User;
 using ConstructionApp.Interfaces.UserInterfaces;
+using ConstructionApp.Interfaces.UserTaskInterfaces;
 using ConstructionApp.Services.ConstructionSiteService;
 using ConstructionApp.Services.ProjectServices;
 using ConstructionApp.Services.ProjectTasksService;
 using ConstructionApp.Services.UserServices;
+using ConstructionApp.Services.UserTaskService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +30,8 @@ builder.Services.AddScoped<IConstructionSiteService, ConstructionSiteService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTaskInterface, ProjectTaskService>();
+builder.Services.AddScoped<UserTaskServices, UserTaskService>();
+
 
 var app = builder.Build();
 

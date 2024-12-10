@@ -1,4 +1,5 @@
 ﻿using ConstructionApp.Dtos.ProjectTask;
+using ConstructionApp.Dtos.User;
 using ConstructionApp.Interfaces.ProjectTasksInterface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,15 @@ namespace ConstructionApp.Controllers
         public async Task<ActionResult<bool>> DeleteProjectTask([FromRoute] Guid projectTaskId, [FromServices] IProjectTaskInterface service)
         {
             var result = await service.DeleteProjectTask(projectTaskId);
+            return Ok(result);
+        }
+        [HttpGet]
+        [Route("{projectTaskId}/users")]
+
+        public async Task<ActionResult<List<UserDetailsDto>>> GetProjectTaskUsers([FromRoute] Guid projectTaskId, [FromServices] IProjectTaskInterface service)
+        {
+            var result = await service.GetProjectTaskUsers(projectTaskId);
+
             return Ok(result);
         }
     }

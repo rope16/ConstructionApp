@@ -1,5 +1,6 @@
 ﻿using ConstructionApp.Dtos.Project;
 using ConstructionApp.Dtos.ProjectTask;
+using ConstructionApp.Dtos.User;
 using ConstructionApp.Interfaces.ProjectTasksInterface;
 using ConstructionApp.Models;
 using Microsoft.EntityFrameworkCore;
@@ -158,5 +159,27 @@ namespace ConstructionApp.Services.ProjectTasksService
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<List<UserDetailsDto>> GetProjectTaskUsers (Guid projectTaskId)
+        {
+        var projectTaskUsers = await _context.UserTasks.Include(u=>u.User).Where(p=>p.ProjectTaskId == projectTaskId).ToListAsync();
+
+            if (!projectTaskUsers.Any())
+            {
+                _logger.LogInformation("No users assigned to this project task");
+                return new List<UserDetailsDto>(); 
+            }
+            var response = projectTaskUsers.Select(u => new UserDetailsDto
+            {
+                Email = u.User.Email,
+                FirstName = u.User.FirstName,
+                LastName = u.User.LastName,
+                IsActive = u.User.IsActive,
+                Role = u.User.Role,
+                UserId = u.User.UserId
+            }).ToList();
+
+            return response;
+        }
+
     }
 }
