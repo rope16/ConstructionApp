@@ -20,7 +20,23 @@ namespace ConstructionApp.Services.AuthServices
 
         public async Task<string> Login(LoginDto dto)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email ==  dto.Email);
+
+            if (user == null)
+            {
+                throw new Exception("User with provided email does not exist.");
+            }
+
+            var valid = _passwordHasher.VerifyPassword(dto.Password, user.Password);
+
+            if (!valid)
+            {
+                throw new Exception("Password was incorrect");
+            }
+
+            var token = _tokenProvider.CreateToken(user);
+
+            return token;
         }
     }
 }

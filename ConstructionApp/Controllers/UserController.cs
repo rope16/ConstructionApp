@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ConstructionApp.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -30,6 +31,7 @@ namespace ConstructionApp.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("{userId}/deleteUser")]
         public async Task<ActionResult<bool>> DeleteUser([FromRoute] Guid userId, [FromServices] IUserService _userService)
@@ -39,6 +41,7 @@ namespace ConstructionApp.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("{userId}/updateUserRole")]
         public async Task<ActionResult<UserDetailsDto>> UpdateUserRole([FromRoute] Guid userId, [FromQuery] string role, [FromServices] IUserService _userService)

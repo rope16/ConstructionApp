@@ -1,14 +1,17 @@
 ﻿using ConstructionApp.Dtos.Project;
 using ConstructionApp.Interfaces.ProjectInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConstructionApp.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("createProject")]
         public async Task<ActionResult<ProjectDetailsDto>> CreateProject(CreateProjectDto dto, [FromServices] IProjectService service)
@@ -20,15 +23,15 @@ namespace ConstructionApp.Controllers
 
         [HttpGet]
         [Route("getAllProjects")]
-
         public async Task<ActionResult<List<ProjectDetailsDto>>> GetAllProjects([FromServices] IProjectService service)
         {
             var response= await service.GetAllProjects();
             return Ok(response);
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("{projectId}/deleteProject")]
-
         public async Task<ActionResult<bool>> DeleteProject([FromRoute] Guid projectId, [FromServices] IProjectService service)
         {
             var response = await service.DeleteProject(projectId);

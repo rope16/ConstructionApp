@@ -2,16 +2,19 @@
 using ConstructionApp.Dtos.ConstructionSite;
 using ConstructionApp.Interfaces.ConstructionSite;
 using ConstructionApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConstructionApp.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ConstructionSiteController : ControllerBase
     {
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [Route("createConstructionSite")]
         public async Task<ActionResult<ConstructionSiteDetailDto>> CreateConstructionSite(
@@ -23,6 +26,7 @@ namespace ConstructionApp.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         [Route("{constructionSiteId}/deleteConstructionSite")]
         public async Task<ActionResult<bool>> DeleteConstructionSite(
@@ -43,6 +47,7 @@ namespace ConstructionApp.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         [Route("{constructionSiteId}/editConstructionSite")]
         public async Task<ActionResult<ConstructionSiteDetailDto>> EditConstructionSite([FromRoute] Guid constructionSiteId, [FromBody] ConstructionSiteEditDto dto, [FromServices] IConstructionSiteService service)
