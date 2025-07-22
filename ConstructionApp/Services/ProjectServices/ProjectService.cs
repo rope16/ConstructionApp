@@ -134,17 +134,17 @@ namespace ConstructionApp.Services.ProjectServices
         }
         public async Task<ProjectDetailsDto> GetProjectWithTasks(Guid projectId)
         {
-            var project= await _context.Projects.FirstOrDefaultAsync(p=>p.ProjectId == projectId);
+            var project = await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == projectId);
             if (project is null)
             {
                 _logger.LogInformation("Project was not found");
                 return new ProjectDetailsDto();
             }
-            var projectTasks=await _context.ProjectTasks.Where(p=>p.ProjectId == projectId).ToListAsync();
+            var projectTasks = await _context.ProjectTasks.Where(p => p.ProjectId == projectId).ToListAsync();
 
             List<ProjectTaskDetailsDto> tasks = new List<ProjectTaskDetailsDto>();
 
-            foreach( var task in projectTasks )
+            foreach (var task in projectTasks)
             {
                 var projectTask = new ProjectTaskDetailsDto
                 {
@@ -171,6 +171,12 @@ namespace ConstructionApp.Services.ProjectServices
             };
 
             return result;
+        }
+
+        public async Task<int> GetProjectCount()
+        {
+            var count = await _context.Projects.CountAsync();
+            return count;
         }
     }
 }

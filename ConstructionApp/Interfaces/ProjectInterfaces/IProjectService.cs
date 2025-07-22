@@ -9,5 +9,6 @@ namespace ConstructionApp.Interfaces.ProjectInterfaces
         Task<bool> DeleteProject(Guid projectId);
         Task<ProjectDetailsDto> UpdateProjectStatus(Guid projectId, string status);
         Task<ProjectDetailsDto> GetProjectWithTasks (Guid projectId);
+        Task<int> GetProjectCount();
     }
 }

@@ -25,7 +25,7 @@ namespace ConstructionApp.Controllers
         [Route("getAllProjects")]
         public async Task<ActionResult<List<ProjectDetailsDto>>> GetAllProjects([FromServices] IProjectService service)
         {
-            var response= await service.GetAllProjects();
+            var response = await service.GetAllProjects();
             return Ok(response);
         }
 
@@ -56,6 +56,14 @@ namespace ConstructionApp.Controllers
         {
             var response = await service.GetProjectWithTasks(projectId);
 
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("projectCount")]
+        public async Task<ActionResult<int>> GetProjectCount([FromServices] IProjectService service)
+        {
+            var response = await service.GetProjectCount();
             return Ok(response);
         }
     }

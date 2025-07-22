@@ -83,9 +83,9 @@ namespace ConstructionApp.Services.ConstructionSiteService
 
             return response;
         }
-        public async Task<ConstructionSiteDetailDto> EditConstructionSite (Guid constructionSiteId, ConstructionSiteEditDto dto)
+        public async Task<ConstructionSiteDetailDto> EditConstructionSite(Guid constructionSiteId, ConstructionSiteEditDto dto)
         {
-             var constructionSite = await _context.ConstructionSites.FirstOrDefaultAsync(cs => cs.ConstructionSiteId == constructionSiteId);
+            var constructionSite = await _context.ConstructionSites.FirstOrDefaultAsync(cs => cs.ConstructionSiteId == constructionSiteId);
 
             if (constructionSite is null)
             {
@@ -110,6 +110,10 @@ namespace ConstructionApp.Services.ConstructionSiteService
             return response;
         }
 
-
+        public async Task<int> GetConstructionSiteCount()
+        {
+            var count = await _context.ConstructionSites.CountAsync();
+            return count;
+        }
     }
 }

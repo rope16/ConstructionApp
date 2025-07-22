@@ -3,6 +3,7 @@ using ConstructionApp.Interfaces.AuthInterfaces;
 using ConstructionApp.Interfaces.ConstructionSite;
 using ConstructionApp.Interfaces.ProjectInterfaces;
 using ConstructionApp.Interfaces.ProjectTasksInterface;
+using ConstructionApp.Interfaces.StatsInterfaces;
 using ConstructionApp.Interfaces.User;
 using ConstructionApp.Interfaces.UserInterfaces;
 using ConstructionApp.Interfaces.UserTaskInterfaces;
@@ -10,6 +11,7 @@ using ConstructionApp.Services.AuthServices;
 using ConstructionApp.Services.ConstructionSiteService;
 using ConstructionApp.Services.ProjectServices;
 using ConstructionApp.Services.ProjectTasksService;
+using ConstructionApp.Services.StatsServices;
 using ConstructionApp.Services.UserServices;
 using ConstructionApp.Services.UserTaskService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -76,6 +78,7 @@ builder.Services.AddScoped<IProjectTaskInterface, ProjectTaskService>();
 builder.Services.AddScoped<UserTaskServices, UserTaskService>();
 builder.Services.AddScoped<ITokenProviderServices, TokenProviderService>();
 builder.Services.AddScoped<IUserAuthServices, UserAuthService>();
+builder.Services.AddScoped<IStatisticsInterface, StatisticsService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

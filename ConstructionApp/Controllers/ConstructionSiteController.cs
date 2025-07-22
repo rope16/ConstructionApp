@@ -55,5 +55,13 @@ namespace ConstructionApp.Controllers
             var response = await service.EditConstructionSite(constructionSiteId, dto);
             return response;
         }
+
+        [HttpGet]
+        [Route("getConstructionSiteCount")]
+        public async Task<ActionResult<int>> GetConstructionSiteCount([FromServices] IConstructionSiteService service)
+        {
+            var response = await service.GetConstructionSiteCount();
+            return Ok(response);
+        }
     }
 }

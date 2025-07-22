@@ -10,5 +10,6 @@ namespace ConstructionApp.Interfaces.ConstructionSite
         Task<bool> DeleteConstructionSite(Guid constructionSiteId);
         Task<List<ConstructionSiteDetailDto>> GetAllConstructionSites();
         Task<ConstructionSiteDetailDto> EditConstructionSite(Guid constructionSiteId, ConstructionSiteEditDto dto);
+        Task<int> GetConstructionSiteCount();
     }
 }

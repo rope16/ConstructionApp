@@ -28,7 +28,9 @@ namespace ConstructionApp.Services.AuthServices
                 [
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim("role", user.Role)
+                    new Claim("role", user.Role),
+                    new Claim("name", user.FirstName + " " + user.LastName),
+                    new Claim("userId", user.UserId.ToString())
                 ]),
                 Expires = DateTime.UtcNow.AddMinutes(_configuration.GetValue<int>("Jwt:ExpirationInMinutes")),
                 SigningCredentials = credentials,
