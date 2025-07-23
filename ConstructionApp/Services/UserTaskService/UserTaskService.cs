@@ -49,5 +49,54 @@ namespace ConstructionApp.Services.UserTaskService
             return true;
         }
 
+        public async Task<List<UserTaskDetailsCardDto>> GetUserTasks(Guid userId, int pageNumber, int pageSize)
+        {
+            var userTasks = await _context.UserTasks
+                .Include(ut => ut.ProjectTask)
+                .ThenInclude(pt => pt.Project)
+                .Include(ut => ut.User)
+                .Where(ut => ut.UserId == userId)
+                .OrderBy(ut => ut.ProjectTask.EndDate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            if (userTasks.Count == 0)
+            {
+                _logger.LogInformation("No tasks found for the user.");
+                return new List<UserTaskDetailsCardDto>();
+            }
+
+            return userTasks.Select(ut => new UserTaskDetailsCardDto
+            {
+                UserTaskId = ut.UserTaskId,
+                Note = ut.Note,
+                ProjectTask = new Dtos.ProjectTask.ProjectTaskDetailsDto
+                {
+                    ProjectTaskId = ut.ProjectTask.ProjectTaskId,
+                    Note = ut.ProjectTask.Note,
+                    Status = ut.ProjectTask.Status,
+                    StartDate = ut.ProjectTask.StartDate.Date,
+                    EndDate = ut.ProjectTask.EndDate.Date,
+                    ProjectDetails = new Dtos.Project.ProjectDetailsDto
+                    {
+                        ProjectId = ut.ProjectTask.Project.ProjectId,
+                        Name = ut.ProjectTask.Project.Name,
+                        Note = ut.ProjectTask.Project.Note,
+                        Status = ut.ProjectTask.Project.Status,
+                        StartDate = ut.ProjectTask.Project.StartDate.Date,
+                        EndDate = ut.ProjectTask.Project.EndDate.Date,
+                        ConstructionSiteId = ut.ProjectTask.Project.ConstructionSiteId
+                    }
+                },
+                User = new Dtos.User.UserDetailsDto
+                {
+                    UserId = ut.User.UserId,
+                    FirstName = ut.User.FirstName,
+                    LastName = ut.User.LastName,
+                    Email = ut.User.Email
+                }
+            }).ToList();
+        }
     }
 }

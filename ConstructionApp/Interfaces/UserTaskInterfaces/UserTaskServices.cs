@@ -7,6 +7,8 @@ namespace ConstructionApp.Interfaces.UserTaskInterfaces
         Task<UserTaskDetailsDto> CreateUserTask(UserTaskCreateDto dto);
 
         Task<bool> DeleteUserTask(Guid userTaskId);
+
+        Task<List<UserTaskDetailsCardDto>> GetUserTasks(Guid userId, int pageNumber, int pageSize);
     }
 
 }

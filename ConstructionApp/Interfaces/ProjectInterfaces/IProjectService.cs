@@ -10,5 +10,6 @@ namespace ConstructionApp.Interfaces.ProjectInterfaces
         Task<ProjectDetailsDto> UpdateProjectStatus(Guid projectId, string status);
         Task<ProjectDetailsDto> GetProjectWithTasks (Guid projectId);
         Task<int> GetProjectCount();
+        Task<List<ProjectDetailsDto>> GetUserProjects(Guid userId, int pageNumber, int pageSize);
     }
 }

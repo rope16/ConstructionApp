@@ -178,5 +178,35 @@ namespace ConstructionApp.Services.ProjectServices
             var count = await _context.Projects.CountAsync();
             return count;
         }
+
+        public async Task<List<ProjectDetailsDto>> GetUserProjects(Guid userId, int pageNumber, int pageSize)
+        {
+            var userProjects = await _context.UserTasks
+                .Where(ut => ut.UserId == userId)
+                .Include(ut => ut.ProjectTask)
+                .ThenInclude(pt => pt.Project)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            if (!userProjects.Any())
+            {
+                _logger.LogInformation("No projects found for the user");
+                return new List<ProjectDetailsDto>();
+            }
+
+            var response = userProjects.Select(ut => new ProjectDetailsDto
+            {
+                ProjectId = ut.ProjectTask.Project.ProjectId,
+                Name = ut.ProjectTask.Project.Name,
+                Note = ut.ProjectTask.Project.Note,
+                StartDate = ut.ProjectTask.Project.StartDate,
+                EndDate = ut.ProjectTask.Project.EndDate,
+                Status = ut.ProjectTask.Project.Status,
+                ConstructionSiteId = ut.ProjectTask.Project.ConstructionSiteId
+            }).ToList();
+
+            return response;
+        }
     }
 }

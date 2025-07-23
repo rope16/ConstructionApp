@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ConstructionApp.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
@@ -64,6 +64,18 @@ namespace ConstructionApp.Controllers
         public async Task<ActionResult<int>> GetProjectCount([FromServices] IProjectService service)
         {
             var response = await service.GetProjectCount();
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("getUserProjects")]
+        public async Task<ActionResult<List<ProjectDetailsDto>>> GetUserProjects(
+            [FromHeader] Guid userId,
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize,
+            [FromServices] IProjectService service)
+        {
+            var response = await service.GetUserProjects(userId, pageNumber, pageSize);
             return Ok(response);
         }
     }

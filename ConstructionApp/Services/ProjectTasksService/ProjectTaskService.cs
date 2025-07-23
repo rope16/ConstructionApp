@@ -159,7 +159,7 @@ namespace ConstructionApp.Services.ProjectTasksService
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<List<UserDetailsDto>> GetProjectTaskUsers (Guid projectTaskId)
+        public async Task<List<UserDetailsDto>> GetProjectTaskUsers(Guid projectTaskId)
         {
         var projectTaskUsers = await _context.UserTasks.Include(u=>u.User).Where(p=>p.ProjectTaskId == projectTaskId).ToListAsync();
 
