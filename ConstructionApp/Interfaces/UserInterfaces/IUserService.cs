@@ -8,5 +8,7 @@ namespace ConstructionApp.Interfaces.UserInterfaces
         Task<List<UserDetailsDto>> GetAllUsers();
         Task<bool> DeleteUser(Guid userId);
         Task<UserDetailsDto> UpdateUserRole(Guid userId, string role);
+        Task<UserDetailsDto> EditUser(EditUserDto dto);
+        Task<UserDetailsDto> GetUserProfile(Guid userId);
     }
 }

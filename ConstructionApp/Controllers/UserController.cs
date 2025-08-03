@@ -50,5 +50,23 @@ namespace ConstructionApp.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut]
+        [Route("{userId}/editUser")]
+        public async Task<ActionResult<UserDetailsDto>> EditUser([FromRoute] Guid userId, [FromBody] EditUserDto dto, [FromServices] IUserService _userService)
+        {
+            var response = await _userService.EditUser(dto);
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{userId}/getProfile")]
+        public async Task<ActionResult<UserDetailsDto>> GetProfile([FromRoute] Guid userId, [FromServices] IUserService _userService)
+        {
+            var response = await _userService.GetUserProfile(userId);
+
+            return Ok(response);
+        }
     }
 }

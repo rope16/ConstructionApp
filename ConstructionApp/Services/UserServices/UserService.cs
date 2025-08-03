@@ -125,5 +125,49 @@ namespace ConstructionApp.Services.UserServices
 
             return response;
         }
+
+        public async Task<UserDetailsDto> EditUser(EditUserDto dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == dto.UserId);
+
+            if (user == null)
+                throw new Exception("Failed to update user, user not found.");
+
+            user.EditUser(dto.FirstName, dto.LastName, dto.Email);
+
+            await _context.SaveChangesAsync();
+
+            var response = new UserDetailsDto
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role,
+                IsActive = user.IsActive,
+            };
+
+            return response;
+        }
+
+        public async Task<UserDetailsDto> GetUserProfile(Guid userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user == null)
+                throw new Exception("Failed to update user, user not found.");
+
+            var response = new UserDetailsDto
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role,
+                IsActive = user.IsActive,
+            };
+
+            return response;
+        }
     }
 }

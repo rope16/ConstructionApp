@@ -42,5 +42,23 @@
         {
             Role = role;
         }
+
+        public void EditUser(string firstName, string lastName, string email)
+        {
+            if (!string.IsNullOrEmpty(firstName))
+            {
+                FirstName = firstName;
+            }
+
+            if (!string.IsNullOrEmpty(lastName))
+            {
+                LastName = lastName;
+            }
+
+            if (string.IsNullOrEmpty(email)) 
+            {
+                Email = email;
+            }
+        }
     }
 }
