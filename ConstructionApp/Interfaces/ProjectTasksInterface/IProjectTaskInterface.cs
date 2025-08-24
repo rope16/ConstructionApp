@@ -10,5 +10,9 @@ namespace ConstructionApp.Interfaces.ProjectTasksInterface
         Task<List<ProjectTaskDetailsDto>> GetAllProjectTasks();
         Task<bool> DeleteProjectTask(Guid projectId);
         Task<List<UserDetailsDto>> GetProjectTaskUsers(Guid projectTaskId);
+        Task<ProjectTaskDetailsDto> UpdateProjectTaskStatus(Guid projectTaskId, string status);
+        Task<ProjectTaskDetailsDto> GetProjectTaskDetails(Guid projectTaskId);
+        Task<ProjectTaskSearchResponseDto> SearchProjectTasks(ProjectTaskFilterDto searchDto);
+        Task<ProjectTaskDetailsDto> EditProjectTask(ProjectTaskEditDto dto);
     }
 }

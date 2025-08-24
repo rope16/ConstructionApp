@@ -15,7 +15,7 @@ namespace ConstructionApp.Controllers
         [HttpPost]
         [Route("createProjectTask")]
         public async Task<ActionResult<ProjectTaskDetailsDto>> CreateProjectTask(
-        [FromForm] ProjectTaskCreateDto dto,
+        [FromBody] ProjectTaskCreateDto dto,
         [FromServices] IProjectTaskInterface service)
         {
             var result = await service.CreateProjectTask(dto);
@@ -57,6 +57,45 @@ namespace ConstructionApp.Controllers
             var result = await service.GetProjectTaskUsers(projectTaskId);
 
             return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("{projectTaskId}/details")]
+        public async Task<ActionResult<ProjectTaskDetailsDto>> GetProjectTaskDetails([FromRoute] Guid projectTaskId, [FromServices] IProjectTaskInterface service)
+        {
+            var result = await service.GetProjectTaskDetails(projectTaskId);
+
+            return Ok(result);
+        }
+
+        [HttpPut]
+        [Route("{projectTaskId}/updateStatus")]
+        public async Task<ActionResult<ProjectTaskDetailsDto>> UpdateStatus(
+            [FromRoute] Guid projectTaskId,
+            [FromQuery] string status,
+            [FromServices] IProjectTaskInterface service)
+        {
+            var response = await service.UpdateProjectTaskStatus(projectTaskId, status);
+            
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public async Task<ActionResult<ProjectTaskSearchResponseDto>> Search([FromQuery] ProjectTaskFilterDto dto, [FromServices] IProjectTaskInterface service)
+        {
+            var response = await service.SearchProjectTasks(dto);
+
+            return response;
+        }
+
+        [HttpPut]
+        [Route("edit")]
+        public async Task<ActionResult<ProjectTaskDetailsDto>> EditProjectTask([FromBody] ProjectTaskEditDto dto, [FromServices] IProjectTaskInterface service)
+        {
+            var response = await service.EditProjectTask(dto);
+
+            return Ok(response);
         }
     }
 }

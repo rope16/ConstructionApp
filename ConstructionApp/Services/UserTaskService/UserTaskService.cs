@@ -1,4 +1,5 @@
-﻿using ConstructionApp.Dtos.UserTask;
+﻿using ConstructionApp.Dtos.User;
+using ConstructionApp.Dtos.UserTask;
 using ConstructionApp.Interfaces.UserTaskInterfaces;
 using ConstructionApp.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,37 +16,65 @@ namespace ConstructionApp.Services.UserTaskService
             _context = context;
             _logger = logger;
         }
-        public async Task<UserTaskDetailsDto> CreateUserTask(UserTaskCreateDto dto)
+        public async Task<UserTaskDetailsDtoV2> CreateUserTask(UserTaskCreateDto dto)
         {
-            var userTask=await _context.UserTasks.FirstOrDefaultAsync(u=>u.UserId==dto.UserId && u.ProjectTaskId==dto.ProjectTaskId);
-            if(userTask!=null)
+            var userTask = await _context.UserTasks.FirstOrDefaultAsync(u => u.UserId == dto.UserId && u.ProjectTaskId == dto.ProjectTaskId);
+
+            if (userTask != null)
             {
                 _logger.LogInformation("User is already assigned to this task");
-                return new UserTaskDetailsDto();
+                return new UserTaskDetailsDtoV2();
             }
-            var newUserTask=UserTask.CreateUserTask(dto.Note, dto.UserId, dto.ProjectTaskId);
-            var response=new UserTaskDetailsDto
-            {
-                UserTaskId = newUserTask.UserTaskId,
-                Note = newUserTask.Note,
-                UserId = newUserTask.UserId,
-                ProjectTaskId = newUserTask.ProjectTaskId,
-            };
-            _context.Add(newUserTask);
-            await _context.SaveChangesAsync();
-            return response;
 
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == dto.UserId);
+
+            if (user == null)
+            {
+                _logger.LogInformation($"User with id {dto.UserId} not found.");
+                return new UserTaskDetailsDtoV2();
+            }
+
+            var projectTask = await _context.ProjectTasks.FirstOrDefaultAsync(p => p.ProjectTaskId == dto.ProjectTaskId);
+
+            if (projectTask == null)
+            {
+                _logger.LogInformation($"Project task with id {dto.ProjectTaskId} not found.");
+                return new UserTaskDetailsDtoV2();
+            }
+
+            var newUserTask = UserTask.CreateUserTask(dto.Note, dto.UserId, dto.ProjectTaskId);
+
+            var response = new UserTaskDetailsDtoV2
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                UserId = user.UserId,
+                Role = user.Role,
+                IsActive = user.IsActive,
+                UserTaskId = newUserTask.UserTaskId
+            };
+
+            _context.Add(newUserTask);
+
+            await _context.SaveChangesAsync();
+
+            return response;
         }
         public async Task<bool> DeleteUserTask (Guid userTaskId)
         {
-            var userTask = await _context.UserTasks.FirstOrDefaultAsync(u=>u.UserTaskId == userTaskId);
+            var userTask = await _context.UserTasks.FirstOrDefaultAsync(u => u.UserTaskId == userTaskId);
+
             if(userTask==null)
             {
                 _logger.LogInformation("Task with provided Id was not found.");
                 return false;
             }
+
             _context.Remove(userTask);
+
             await _context.SaveChangesAsync();
+
             return true;
         }
 
@@ -74,6 +103,7 @@ namespace ConstructionApp.Services.UserTaskService
                 ProjectTask = new Dtos.ProjectTask.ProjectTaskDetailsDto
                 {
                     ProjectTaskId = ut.ProjectTask.ProjectTaskId,
+                    Title = ut.ProjectTask.Title,
                     Note = ut.ProjectTask.Note,
                     Status = ut.ProjectTask.Status,
                     StartDate = ut.ProjectTask.StartDate.Date,

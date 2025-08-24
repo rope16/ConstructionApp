@@ -78,5 +78,26 @@ namespace ConstructionApp.Controllers
             var response = await service.GetUserProjects(userId, pageNumber, pageSize);
             return Ok(response);
         }
+
+        [HttpGet]
+        [Route("search")]
+        public async Task<ActionResult<SearchProjectResponseDto>> SearchProjects([FromQuery] ProjectFilterDto dto, [FromServices] IProjectService service)
+        {
+            var reponse = await service.SearchProjects(dto);
+
+            return Ok(reponse);
+        }
+
+        [HttpPut]
+        [Route("editProject")]
+        public async Task<ActionResult<ProjectDetailsDto>> EditProject(
+            [FromRoute] Guid projectId,
+            [FromBody] EditProjectDto dto,
+            [FromServices] IProjectService service)
+        {
+            var response = await service.EditProject(dto);
+
+            return Ok(response);
+        }
     }
 }

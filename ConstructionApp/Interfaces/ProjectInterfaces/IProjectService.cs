@@ -11,5 +11,7 @@ namespace ConstructionApp.Interfaces.ProjectInterfaces
         Task<ProjectDetailsDto> GetProjectWithTasks (Guid projectId);
         Task<int> GetProjectCount();
         Task<List<ProjectDetailsDto>> GetUserProjects(Guid userId, int pageNumber, int pageSize);
+        Task<SearchProjectResponseDto> SearchProjects(ProjectFilterDto filterDto);
+        Task<ProjectDetailsDto> EditProject(EditProjectDto dto);
     }
 }

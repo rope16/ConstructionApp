@@ -15,7 +15,7 @@ namespace ConstructionApp.Controllers
     {
         [HttpPost]
         [Route("createUser")]
-        public async Task<ActionResult<UserDetailsDto>> CreateUser(CreateUserDto dto, [FromServices] IUserService _userService)
+        public async Task<ActionResult<UserDetailsDto>> CreateUser([FromBody] CreateUserDto dto, [FromServices] IUserService _userService)
         {
             var response = await _userService.CreateUser(dto);
 
@@ -67,6 +67,19 @@ namespace ConstructionApp.Controllers
             var response = await _userService.GetUserProfile(userId);
 
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("searchUsers")]
+        public async Task<ActionResult<UserSearchResponseDto>> SearchUsers(
+            [FromQuery] int pageSize,
+            [FromQuery] int page,
+            [FromServices] IUserService _userService,
+            [FromQuery] string? query = null)
+        {
+            var response = await _userService.SearchUsers(page, pageSize, query);
+
+            return response;
         }
     }
 }

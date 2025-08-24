@@ -14,12 +14,16 @@
         public string Password { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
+
+        public ICollection<UserTask> UserTasks { get; set; } = new HashSet<UserTask>();
 
         public static User CreateUser(
             string firstName,
             string lastName,
             string email,
-            string password)
+            string password,
+            string role)
         {
             return new User
             {
@@ -28,8 +32,9 @@
                 LastName = lastName,
                 Email = email,
                 Password = password,
-                Role = UserRoles.User.ToString(),
-                IsActive = true
+                Role = role,
+                IsActive = true,
+                CreatedAtUtc = DateTime.UtcNow
             };
         }
 

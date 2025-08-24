@@ -11,5 +11,6 @@ namespace ConstructionApp.Interfaces.ConstructionSite
         Task<List<ConstructionSiteDetailDto>> GetAllConstructionSites();
         Task<ConstructionSiteDetailDto> EditConstructionSite(Guid constructionSiteId, ConstructionSiteEditDto dto);
         Task<int> GetConstructionSiteCount();
+        Task<ConstructionSiteSearchResponseDto> Search(ConstructionSiteFilterDto dto);
     }
 }

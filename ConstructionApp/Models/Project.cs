@@ -19,6 +19,8 @@
 
         #region #Relationships
         public ConstructionSite? ConstructionSite { get; set; }
+
+        public ICollection<ProjectTask> Tasks { get; set; } = new HashSet<ProjectTask>();
         #endregion
 
         public static Project CreateProject(
@@ -33,8 +35,8 @@
                 ProjectId = Guid.NewGuid(),
                 Name = name,
                 Note = note,
-                StartDate = startDate,
-                EndDate = endDate,
+                StartDate = DateTime.SpecifyKind(startDate, DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(endDate, DateTimeKind.Utc),
                 Status = ProjectStatus.NotStarted.ToString(),
                 ConstructionSiteId = constructionSiteId
             };
@@ -43,6 +45,29 @@
         public void UpdateProjectStatus(string status)
         {
             Status = status;
+        }
+
+        public void EditProject(string name, string note, DateTime startDate, DateTime endDate)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                Name = name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(note))
+            {
+                Note = note;
+            }
+
+            if (startDate != default && startDate != DateTime.MinValue)
+            {
+                StartDate = startDate;
+            }
+
+            if (endDate != default && endDate != DateTime.MinValue)
+            {
+                EndDate = endDate;
+            }
         }
     }
 }

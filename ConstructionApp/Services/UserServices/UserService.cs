@@ -34,7 +34,13 @@ namespace ConstructionApp.Services.UserServices
 
             var hashedPassword = _passwordHasher.HashPassword(dto.Password);
 
-            var newUser = User.CreateUser(dto.FirstName, dto.LastName, dto.Email, hashedPassword);
+            if (!Enum.TryParse(typeof(UserRoles), dto.Role, out var validRole))
+            {
+                _logger.LogInformation("User role does not exist.");
+                return new UserDetailsDto();
+            }
+
+            var newUser = User.CreateUser(dto.FirstName, dto.LastName, dto.Email, hashedPassword, validRole.ToString());
 
             _context.Add(newUser);
 
@@ -45,7 +51,7 @@ namespace ConstructionApp.Services.UserServices
                 LastName = newUser.LastName,
                 Email = newUser.Email,
                 IsActive = newUser.IsActive,
-                Role = UserRoles.User.ToString()
+                Role = validRole.ToString()
             };
 
             await _context.SaveChangesAsync();
@@ -165,6 +171,48 @@ namespace ConstructionApp.Services.UserServices
                 Email = user.Email,
                 Role = user.Role,
                 IsActive = user.IsActive,
+            };
+
+            return response;
+        }
+
+        public async Task<UserSearchResponseDto> SearchUsers(int page, int pageSize, string? query = null)
+        {
+            var searchQuery = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query) && !string.IsNullOrEmpty(query))
+            {
+                searchQuery = searchQuery.Where(u =>
+                    EF.Functions.ILike(u.FirstName, $"%{query}%") ||
+                    EF.Functions.ILike(u.LastName, $"%{query}%") ||
+                    EF.Functions.ILike(u.Email, $"%{query}%"));
+            }
+
+            var totalCount = await searchQuery.CountAsync();
+
+            var users = await searchQuery
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.CreatedAtUtc)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var mappedUsers = users.Select(u => new UserDetailsDto
+            {
+                UserId = u.UserId,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                Role = u.Role,
+                IsActive = u.IsActive,
+            }).ToList();
+
+            var response = new UserSearchResponseDto
+            {
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize,
+                Users = mappedUsers,
             };
 
             return response;

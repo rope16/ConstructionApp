@@ -14,6 +14,6 @@ namespace ConstructionApp.Dtos.Project
         public Guid? ConstructionSiteId { get; set; }
         public ConstructionSiteDetailDto? ConstructionSiteDetails { get; set; }
 
-        public List<ProjectTaskDetailsDto>? ProjectTasksDto { get; set; }
+        public List<ProjectTaskDetailsDto>? ProjectTasks { get; set; }
     }
 }

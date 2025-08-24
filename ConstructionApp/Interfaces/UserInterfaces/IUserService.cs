@@ -10,5 +10,6 @@ namespace ConstructionApp.Interfaces.UserInterfaces
         Task<UserDetailsDto> UpdateUserRole(Guid userId, string role);
         Task<UserDetailsDto> EditUser(EditUserDto dto);
         Task<UserDetailsDto> GetUserProfile(Guid userId);
+        Task<UserSearchResponseDto> SearchUsers(int page, int pageSize, string? query = null);
     }
 }

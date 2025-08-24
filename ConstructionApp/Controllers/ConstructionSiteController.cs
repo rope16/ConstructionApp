@@ -39,7 +39,7 @@ namespace ConstructionApp.Controllers
         }
 
         [HttpGet]
-        [Route("/getAllCOnstructionSites")]
+        [Route("/getAllConstructionSites")]
         public async Task<ActionResult<List<ConstructionSiteDetailDto>>> GetAllConstructionSites([FromServices] IConstructionSiteService service)
         {
             var response = await service.GetAllConstructionSites();
@@ -61,6 +61,15 @@ namespace ConstructionApp.Controllers
         public async Task<ActionResult<int>> GetConstructionSiteCount([FromServices] IConstructionSiteService service)
         {
             var response = await service.GetConstructionSiteCount();
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public async Task<ActionResult<ConstructionSiteSearchResponseDto>> Search([FromQuery] ConstructionSiteFilterDto dto, [FromServices] IConstructionSiteService service)
+        {
+            var response = await service.Search(dto);
+
             return Ok(response);
         }
     }

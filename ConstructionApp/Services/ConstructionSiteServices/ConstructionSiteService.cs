@@ -115,5 +115,45 @@ namespace ConstructionApp.Services.ConstructionSiteService
             var count = await _context.ConstructionSites.CountAsync();
             return count;
         }
+
+        public async Task<ConstructionSiteSearchResponseDto> Search(ConstructionSiteFilterDto dto)
+        {
+            var query = _context.ConstructionSites.AsNoTracking().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(dto.Search))
+            {
+                var searchToLower = dto.Search.ToLower();
+                query = query.Where(cs => 
+                    EF.Functions.ILike(cs.Contractor, $"%{searchToLower}%") ||
+                    EF.Functions.ILike(cs.Address, $"%{searchToLower}%") ||
+                    EF.Functions.ILike(cs.Investor, $"%{searchToLower}%"));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var sites = await query
+                .OrderBy(cs => cs.Address)
+                .Skip((dto.Page - 1) * dto.PageSize)
+                .Take(dto.PageSize)
+                .ToListAsync();
+
+            var mappedSites = sites.Select(cs => new ConstructionSiteDetailDto
+            {
+                ConstructionSiteId = cs.ConstructionSiteId,
+                Address = cs.Address,
+                Contractor = cs.Contractor,
+                Investor = cs.Investor
+            }).ToList();
+
+            var response = new ConstructionSiteSearchResponseDto
+            {
+                Count = totalCount,
+                Page = dto.Page,
+                PageSize = dto.PageSize,
+                Sites = mappedSites
+            };
+
+            return response;
+        }
     }
 }
