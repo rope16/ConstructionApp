@@ -40,9 +40,9 @@ namespace ConstructionApp.Models
             };
         }
 
-        public void UpdateStatus(ProjectTaskStatus status)
+        public void UpdateStatus(string status)
         {
-            Status = status.ToString();
+            Status = status;
         }
 
         public void EditProjectTask(string title, string note, DateTime startDate, DateTime endDate)

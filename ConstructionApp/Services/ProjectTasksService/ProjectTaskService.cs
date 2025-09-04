@@ -44,6 +44,10 @@ namespace ConstructionApp.Services.ProjectTasksService
                 }
             }
 
+            _context.Add(newProjectTask);
+
+            await _context.SaveChangesAsync();
+
             var response = new ProjectTaskDetailsDto
             {
                 ProjectTaskId = newProjectTask.ProjectTaskId,
@@ -63,10 +67,6 @@ namespace ConstructionApp.Services.ProjectTasksService
                     ConstructionSiteId = project.ConstructionSiteId
                 }
             };
-
-            _context.Add(newProjectTask);
-
-            await _context.SaveChangesAsync();
 
             return response;
         }
@@ -196,6 +196,10 @@ namespace ConstructionApp.Services.ProjectTasksService
             var projectTask = await _context.ProjectTasks
                 .Include(pt => pt.Project)
                 .FirstOrDefaultAsync(pt => pt.ProjectTaskId == projectTaskId);
+
+            projectTask.UpdateStatus(projectTaskStatus.ToString());
+
+            await _context.SaveChangesAsync();
 
             var response = new ProjectTaskDetailsDto
             {
